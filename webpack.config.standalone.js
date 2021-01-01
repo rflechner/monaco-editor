@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const MergeIntoSingleFilePlugin = require('webpack-merge-and-include-globally');
 
 module.exports = {
   mode: 'production',
@@ -21,6 +22,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.ttf$/,
+        use: ['file-loader']
       }
     ]
   },
@@ -31,6 +36,13 @@ module.exports = {
     ),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
+    }),
+    new MergeIntoSingleFilePlugin({
+      files: {
+        'monaco.bundle.js': [
+          'dist/standalone/**/*.js'
+        ]
+      }
     })
   ]
 }
